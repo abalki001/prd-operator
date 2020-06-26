@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: "{{prdauth_service_name}}"
+    namespace: "{{prd_namespace}}"           
+
+spec:
+    selector:
+        {{prdauth_service_selector}}
+    type: {{prdauth_service_type}}
+    ports:
+        - protocol: TCP
+          port: {{prdauth_port | int}}
+          targetPort: {{prdauth_port | int}}
+          nodePort: {{prdauth_port | int}}
+          name: "{{prdauth_service_port_name}}"

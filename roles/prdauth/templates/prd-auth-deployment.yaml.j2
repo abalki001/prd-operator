@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: "{{prdauth_name}}"
+    namespace: "{{prd_namespace}}"
+    labels:
+        {{prdauth_app_label}}
+
+spec:
+    replicas: {{prdauth_size}}
+    selector:
+        matchLabels:
+            {{prdauth_app_label}}
+    template:
+        metadata:
+            labels:
+                {{prdauth_app_label}}
+        spec:
+            containers:
+            - name: prdauth
+              image: "{{prdauth_image}}"
+              imagePullPolicy: "{{prdauth_image_pull_policy}}"
+              ports:
+                - containerPort: {{prdauth_port|int}}
+                  name: forauth
+              env:
+              - name: CURRENTSERVER_HOSTNAME
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: currentServer.hostname
+              - name: CURRENTSERVER_PORT
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: currentServer.port
+              - name: DEFAULT_AUTH_HTTPS_PORT
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: default.auth.https.port
+              - name: OIDC_CLIENT1_HOSTNAME
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: oidc.client1.hostname
+              - name: OIDC_CLIENT1_IP
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: oidc.client1.ip
+              - name: OIDC_CLIENT1_PORT
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: oidc.client1.port
+              - name: USER_ID
+                valueFrom:
+                 configMapKeyRef:
+                  name: "{{prdauth_configmap_name}}"
+                  key: container.user.id
+
+            imagePullSecrets:
+            - name: pslabhishekannedockerio
+            

@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: "{{prdapp_name}}"
+    namespace: "{{prd_namespace}}"
+    labels: 
+        {{prdapp_app_label}}
+spec:
+    replicas:  {{prdapp_size}}
+    selector:  
+        matchLabels:
+            {{prdapp_app_label}}
+    template:
+        metadata:
+            labels:
+                {{prdapp_app_label}}
+        spec:    
+            containers:
+            - name: prdapp
+              image: "{{prdapp_image}}"
+              imagePullPolicy: "{{prdapp_image_pull_policy}}"
+              ports: 
+                - containerPort: {{prdapp_port| int}}
+                  name: forui
+              env:
+              - name: DATABASE_USER
+                valueFrom:
+                 secretKeyRef:
+                  name: "{{prdapp_secret_name}}"
+                  key: database.user
+              - name: DATABASE_PASSWORD
+                valueFrom:
+                 secretKeyRef:
+                  key: database.password
+                  name: "{{prdapp_secret_name}}"
+              - name: DEFAULT_APP_HTTPS_PORT
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: default.app.https.port
+              - name: OIDC_HOSTNAME
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: oidc.hostname
+              - name: OIDC_PORT
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: oidc.port
+              - name: DATABASE_NAME
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: database.name
+              - name: DATABASE_SERVER
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: database.server
+              - name: DATABASE_PORT
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: database.port
+              - name: USER_ID
+                valueFrom:
+                   configMapKeyRef:
+                     name: "{{prdapp_configmap_name}}"
+                     key: container.user.id
+

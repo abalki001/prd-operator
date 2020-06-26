@@ -1,0 +1,11 @@
+---
+# tasks file for prd
+
+- name: create prd application
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', item) | from_yaml  }}"
+  with_items:
+    - prd-app-secret.yaml.j2
+    - prd-app-configmap.yaml.j2
+    - prd-app-deployment.yaml.j2
+    - prd-app-service.yaml.j2

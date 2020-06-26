@@ -1,0 +1,10 @@
+---
+- version: v1alpha1
+  group: prd.persistent.com
+  kind: PRDAUTH
+  playbook: playbook_prdauth.yml
+
+- version: v1alpha1
+  group: prd.persistent.com
+  kind: PRDAPP
+  playbook: playbook_prdapp.yml

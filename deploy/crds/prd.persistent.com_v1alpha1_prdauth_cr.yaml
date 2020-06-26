@@ -1,0 +1,15 @@
+apiVersion: prd.persistent.com/v1alpha1
+kind: PRDAUTH
+metadata:
+  name: prdauth
+spec:
+  # Add fields here
+  size: 1
+  
+  image: "in-ibmibm6049:5000/prdauth:12"
+  port: 31000
+
+  prdapp:
+    port: 30000
+
+  

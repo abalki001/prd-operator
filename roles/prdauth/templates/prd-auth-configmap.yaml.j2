@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{prdauth_configmap_name}}"
+  namespace: "{{prd_namespace}}"
+
+data:
+
+  #PRDAUTH
+  currentServer.hostname: "{{prdauth_service_name}}"
+  currentServer.port: "{{prdauth_port}}"
+  
+  default.auth.https.port: "{{prdauth_port}}"
+  
+  #DEFAULT APPLICATION PORT
+  default.https.port: "{{prdauth_port}}"
+
+  oidc.client1.hostname: "{{prdapp_service_name}}"
+  oidc.client1.ip: "{{prdapp_service_name}}"
+  oidc.client1.port: "{{prdapp_port}}"
+
+  #For OCP Platform
+  container.user.id: "1003310000"
+  #For K8 Platform
+  #container.user.id: "1001"

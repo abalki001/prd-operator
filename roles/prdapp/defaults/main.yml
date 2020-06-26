@@ -1,0 +1,30 @@
+---
+# defaults file for prd
+prd_namespace: "{{meta.namespace}}"
+
+# PRD App
+prdapp_name: "{{meta.name}}-prdapp"
+prdapp_app_label: 
+  app: "{{meta.name}}-prdapp"
+prdapp_image: "{{image}}"
+prdapp_image_pull_policy: "IfNotPresent"
+prdapp_port: "{{port}}"
+prdapp_size: "{{size}}"
+
+# PRD App Service
+#prdapp_service_name: "{{meta.name}}-prdapp-service"
+prdapp_service_name: "prdapp-service"
+prdapp_service_selector: 
+  app: "{{meta.name}}-prdapp"
+prdapp_service_port_name: "{{meta.name}}-prdapp"
+prdapp_service_type: "NodePort"
+
+# PRD Auth
+prdauth_port: "{{prdauth.port}}"
+
+# PRD Auth Service
+#prdauth_service_name: "{{meta.name}}-prdauth-service"
+prdauth_service_name: "prdauth-service"
+
+prdapp_secret_name: "{{meta.name}}-prdapp-secret"
+prdapp_configmap_name: "{{meta.name}}-prdapp-configmap"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: "{{prdapp_service_name}}"
+    namespace: "{{prd_namespace}}"
+spec:
+    selector: {{prdapp_service_selector}}
+    type: {{prdapp_service_type}}
+    ports:
+        - protocol: TCP
+          port: {{prdapp_port | int}}
+          targetPort: {{prdapp_port | int}}
+          nodePort: {{prdapp_port | int}}
+          name: "{{prdapp_service_port_name}}"

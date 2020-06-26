@@ -1,0 +1,24 @@
+apiVersion: prd.persistent.com/v1alpha1
+kind: PRDAPP
+metadata:
+  name: prdapp
+spec:
+  # Add fields here
+  size: 1
+  image: "in-ibmibm6049:5000/prdapp:12"
+  port: 30000
+  ui:
+    default_user: c21hZG1pbg==
+    default_password: c21hZG1pbg==
+
+  prdauth:
+    port: 31000
+
+  #DEFAULT_POSTGRESQL_DATABASE_CONFIG
+  database:
+    name: "prddb"
+    user: cHJkZGJh
+    password: cHJkZGJh
+    create_flag: "false"
+    server: "prddb-service"
+    port: "5432"
