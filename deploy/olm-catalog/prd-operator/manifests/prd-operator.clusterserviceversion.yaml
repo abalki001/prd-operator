@@ -1,0 +1,216 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "prd.persistent.com/v1alpha1",
+          "kind": "PRDAPP",
+          "metadata": {
+            "name": "prdapp"
+          },
+          "spec": {
+            "database": {
+              "create_flag": "false",
+              "name": "prddb",
+              "password": "cHJkZGJh",
+              "port": "5432",
+              "server": "prddb-service",
+              "user": "cHJkZGJh"
+            },
+            "image": "in-ibmibm6049:5000/prdapp:12",
+            "port": 30000,
+            "prdauth": {
+              "port": 31000
+            },
+            "size": 1,
+            "ui": {
+              "default_password": "c21hZG1pbg==",
+              "default_user": "c21hZG1pbg=="
+            }
+          }
+        },
+        {
+          "apiVersion": "prd.persistent.com/v1alpha1",
+          "kind": "PRDAUTH",
+          "metadata": {
+            "name": "prdauth"
+          },
+          "spec": {
+            "image": "in-ibmibm6049:5000/prdauth:12",
+            "port": 31000,
+            "prdapp": {
+              "port": 30000
+            },
+            "size": 1
+          }
+        }
+      ]
+    capabilities: Basic Install
+  name: prd-operator.v0.1.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: PRDAPP
+      name: prdapps.prd.persistent.com
+      version: v1alpha1
+    - kind: PRDAUTH
+      name: prdauths.prd.persistent.com
+      version: v1alpha1
+  description: This operator enables to setup PRD application with its modules
+  displayName: PRD-Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments:
+      - name: prd-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: prd-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: prd-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: prd-operator
+                - name: ANSIBLE_GATHERING
+                  value: explicit
+                - name: ANSIBLE_DEBUG_LOGS
+                  value: "False"
+                image: prd-operator:v0.0.1
+                imagePullPolicy: IfNotPresent
+                name: prd-operator
+                resources: {}
+                volumeMounts:
+                - mountPath: /tmp/ansible-operator/runner
+                  name: runner
+              serviceAccountName: prd-operator
+              volumes:
+              - emptyDir: {}
+                name: runner
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - apps
+          resourceNames:
+          - prd-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - replicasets
+          - deployments
+          verbs:
+          - get
+        - apiGroups:
+          - prd.persistent.com
+          resources:
+          - '*'
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        serviceAccountName: prd-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - PRD
+  - Persistent
+  - Responsive
+  - Dashboard
+  links:
+  - name: Prd Operator
+    url: https://prd-operator.domain
+  maintainers:
+  - email: abhijit_balki@persistent.com
+    name: Abhijit Balki
+  - email: gunjan.garge@accelerite.com
+    name: Gunjan Garge
+  - email: manoj_dhanorkar@persistent.com
+    name: Manoj Dhanorkar
+  maturity: alpha
+  provider:
+    name: Persistent Systems Limited
+    url: https://www.persistent.com/
+  version: 0.1.0
