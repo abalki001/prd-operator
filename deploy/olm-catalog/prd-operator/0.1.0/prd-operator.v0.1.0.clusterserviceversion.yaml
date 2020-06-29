@@ -212,5 +212,5 @@ spec:
   maturity: alpha
   provider:
     name: Persistent Systems Limited
-    url: https://www.persistent.com/
+    url: https://www.persistent.com
   version: 0.1.0
