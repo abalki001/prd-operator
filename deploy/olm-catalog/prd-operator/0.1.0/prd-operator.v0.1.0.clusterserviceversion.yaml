@@ -47,7 +47,10 @@ metadata:
           }
         }
       ]
-    capabilities: Basic Install
+    capabilities: Seamless Upgrades
+    containerImage: prd-operator:v0.0.1
+    repository: https://github.com/abalki001/prd-operator
+    createdAt: '2020-06-30T11:17:00Z'
   name: prd-operator.v0.1.0
   namespace: placeholder
 spec:
@@ -57,10 +60,20 @@ spec:
     - kind: PRDAPP
       name: prdapps.prd.persistent.com
       version: v1alpha1
+      displayName: PRD App Module
+      description: Represents a resource for managing PRD App Module
     - kind: PRDAUTH
       name: prdauths.prd.persistent.com
       version: v1alpha1
-  description: This operator enables to setup PRD application with its modules
+      displayName: PRD Auth Module
+      description: Represents a resource for managing PRD Auth Module
+  description: "This operator enables to setup PRD application with its modules easily by defining simple Custom Resource.\
+    \ Operator's features are as follows:\n\n* Setup a PRD Auth and App modules.\
+    \  \n* Database is assumed to be setup in same namespace.\
+    \  \n* Seamless upgrade of individual modules.\
+    \ \r\n\r\n## Installation\r\nPRD Application uses external database. \
+    \  Ensure that this Database is already setup and running in same namespace.\
+    \  \n By default, all resources will be created in a namespace called `prd`. \r\n\r\n"
   displayName: PRD-Operator
   icon:
   - base64data: ""
